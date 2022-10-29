@@ -25,6 +25,6 @@ class Exchange(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(Exchange, "/prices")
+api.add_resource(Exchange, "/api/rest/prices")
 app.run(host="0.0.0.0", debug=True, use_reloader=False)
 

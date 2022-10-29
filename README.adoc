@@ -25,4 +25,4 @@ python exchange.py
 
 == Service EndPoint
 
-http://localhost:5000/btc-price
+http://localhost:5000/api/rest/prices
