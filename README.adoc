@@ -13,7 +13,7 @@ pip install -r requirements.txt
 === Run stand-along
 
 ----
-python exchange.py
+python Exchange.py
 ----
 
 === Docker
