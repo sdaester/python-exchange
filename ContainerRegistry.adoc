@@ -1,0 +1,109 @@
+= Container Registry
+
+* Create a Container Registry
+
+https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli
+
+* Local login
+
+docker login <Login server from the registry crated>
+
+* Ensure user has the rights to manage dockers from your local
+
+https://aka.ms/acr/authorization
+
+== How to create configure Container Principal
+
+* How to create a configure Container Principal
+
+https://learn.microsoft.com/en-gb/azure/container-registry/container-registry-auth-service-principal#create-a-service-principal
+
+* Roles Overview Container Registry
+
+https://learn.microsoft.com/en-gb/azure/container-registry/container-registry-roles?tabs=azure-cli
+
+=== Script to create container principal
+
+* Setting:
+
+ACR_NAME=basketregistry.azurecr.io
+ SERVICE_PRINCIPAL_NAME=BasketRegistryPrincipal
+ –role Owner
+
+* Execute this script on Azure Shell CLI:
+
+----
+#!/bin/bash
+# This script requires Azure CLI version 2.25.0 or later. Check version with `az --version`.
+
+# Modify for your environment.
+# ACR_NAME: The name of your Azure Container Registry
+# SERVICE_PRINCIPAL_NAME: Must be unique within your AD tenant
+ACR_NAME=basketregistry.azurecr.io
+SERVICE_PRINCIPAL_NAME=BasketRegistryPrincipal
+
+# Obtain the full registry ID
+ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query "id" --output tsv)
+# echo $registryId
+
+# Create the service principal with rights scoped to the registry.
+# Default permissions are for docker pull access. Modify the '--role'
+# argument value as desired:
+# acrpull:     pull only
+# acrpush:     push and pull
+# owner:       push, pull, and assign roles
+PASSWORD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role Owner --query "password" --output tsv)
+USER_NAME=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].appId" --output tsv)
+
+# Output the service principal's credentials; use these in your services and
+# applications to authenticate to the container registry.
+echo "Service principal ID: $USER_NAME"
+echo "Service principal password: $PASSWORD"
+---
+----
+
+* Gather and save the output of
+
+echo "Service principal ID: $USER_NAME"
+echo "Service principal password: $PASSWORD"
+
+== Mange Images
+
+* push
+
+docker tag local-image:tagname <login-server>/new-repo:tag-name
+
+docker push <login-server>/new-repo:tag-name
+
+* help:
+
+https://www.thecodebuzz.com/azure-cli-push-a-docker-container-to-azure-private-registry/#:~:text=1%20Create%20an%20Azure%20cloud%20resource%20group%202,to%20registry%205%20Run%20Image%20from%20ACR%20instance
+
+== Deployment
+
+https://learn.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cazure-portal%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli
+
+* if you are using admin user, enable admin user
+
+https://learn.microsoft.com/en-us/azure/container-registry/container-registry-authentication?tabs=azure-cli
+
+== Logs
+
+1)
+
+* Create Log Analytics workspace
+* it is required to send app logs
+* create a diagnostic adding app service logs
+* select log analytics workspace and the one created
+
+2)
+
+* Advanced tools
+- logstream
+- Current Docker logs, in side the logs urls
+
+3)
+
+* via bash
+
+  az webapp log tail --name python-exchange --resource-group BASKET.INVESTMETS.GROUP
