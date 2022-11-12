@@ -10,6 +10,8 @@ import logging
 
 from Cache import PricesCache
 
+TRADE_ENABLED=False
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(process)d [%(levelname)s] %(name)s: %(message)s')
 
 THROTTLE = 2
@@ -69,7 +71,8 @@ class BinanceAPIClient(threading.Thread, metaclass=ThreadSafeSingleton):
         for symbol in prices_resp:
             price = prices_resp[symbol]
             self.prices_cache.set(symbol, price)
-        self.retrieve_trades()
+        if TRADE_ENABLED:
+            self.retrieve_trades()
 
     def run(self):
         while self.running:
@@ -94,6 +97,7 @@ class BinanceAPIClient(threading.Thread, metaclass=ThreadSafeSingleton):
             symbol = id + self.cross_ccy
             trades = self.client.get_recent_trades(symbol=symbol)
             self.update_elastic(symbol, trades)
+
 
 def start_price_client(prices_cache):
     client = BinanceAPIClient(prices_cache, ids=SUBSCRIPTIONS)

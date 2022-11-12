@@ -59,7 +59,7 @@ USER_NAME=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].app
 # applications to authenticate to the container registry.
 echo "Service principal ID: $USER_NAME"
 echo "Service principal password: $PASSWORD"
----
+
 ----
 
 * Gather and save the output of
@@ -67,7 +67,7 @@ echo "Service principal password: $PASSWORD"
 echo "Service principal ID: $USER_NAME"
 echo "Service principal password: $PASSWORD"
 
-== Mange Images
+== Manage Images from Local
 
 * push
 
@@ -79,7 +79,7 @@ docker push <login-server>/new-repo:tag-name
 
 https://www.thecodebuzz.com/azure-cli-push-a-docker-container-to-azure-private-registry/#:~:text=1%20Create%20an%20Azure%20cloud%20resource%20group%202,to%20registry%205%20Run%20Image%20from%20ACR%20instance
 
-== Deployment
+== Deployment from Local
 
 https://learn.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cazure-portal%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli
 

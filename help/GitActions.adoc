@@ -1,0 +1,11 @@
+# Git Actions
+
+### Reference Links
+
+* Azure Deploy to registry
+
+https://learn.microsoft.com/en-us/azure/container-instances/container-instances-github-action
+
+* Azure Deploy container
+
+https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel
