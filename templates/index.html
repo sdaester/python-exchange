@@ -1,19 +1,31 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>HOME</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style type="text/css">
-        .container {
-            max-width: 500px;
-            padding-top: 100px;
-        }
-    </style>
+    <title>Demo</title>
 </head>
 
 <body>
-    <div class="container">
-        <a href="/api/rest/prices" target="output">CLICK: Exchange Rest API for Prices</a>
+    <h2>Welcome!!! </h2>
+    <h4>Rest API example endpoints:</h4>
+    <div>
+        <p><a href="/api/rest/prices" target="output">Exchange Prices rest api</a></p>
+        <p><a href="/api/rest/option_prices?stock=IBM&expiry=1&opt_type=put" target="output">Price Option rest api</a></p>
+    </div>
+    {% block body %}
+    <div>
+        <p>To Create a Option price request:</p>
+        <ul>
+            <li>stock = mic</li>
+            <li>expiry = number in years</li>
+            <li>opt_type = put or call</li>
+        </ul>
+    </div>
+    <div>
+        <p>Option price request example:</p>
+        <p>/api/rest/option_prices?stock=IBM&expiry=1&opt_type=put</p>
+    </div>
+    {% endblock %}
+</body>
 
 </html>

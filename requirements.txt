@@ -3,3 +3,5 @@ numpy
 flask-restful
 pycoingecko
 python-binance
+yfinance
+pandas
