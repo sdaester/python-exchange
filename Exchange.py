@@ -27,6 +27,7 @@ app = Flask(__name__)
 api = Api(app)
 api.add_resource(Exchange, "/api/rest/prices")
 
+
 @app.route('/')
 def index():
     return render_template('index.html')

@@ -1,11 +1,176 @@
 # Git Actions
 
-### Reference Links
+## Azure Deploy a container instance
 
-* Azure Deploy to registry
+* Prerequisites
+-   Create a container registry <container_registry>
+-   Create a container instance <container_name>
+
+* Create the app_registry_name
+
+    az ad sp create-for-rbac --name <app_registry_name> --role contributor \
+                          --scopes /subscriptions/<subscriptionId>/resourceGroups/<groupId>/providers/Microsoft.ContainerInstance/containerGroups/<container_name> \
+                          --sdk-auth
+
+* Result:
+
+    {
+      "clientId": "xxx",
+      "clientSecret": "xxx",
+      "subscriptionId": "xxx",
+      "tenantId": "xxx",
+      "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+      "resourceManagerEndpointUrl": "https://management.azure.com/",
+      "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+      "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+      "galleryEndpointUrl": "https://gallery.azure.com/",
+      "managementEndpointUrl": "https://management.core.windows.net/"
+    }
+
+* add grants to push images into the container registry
+
+    registryId=$(az acr show --name <container_registry> --resource-group <groupId> --query id --output tsv)
+    az role assignment create --assignee <clientId> --scope $registryId --role AcrPush
+
+
+* in git:
+
+- create the secrets:
+
+
+|===
+|Secret|Value
+
+|AZURE_CREDENTIALS|json from above
+|REGISTRY_LOGIN_SERVER|<container_registry_name>.azurecr.io
+|REGISTRY_USERNAME|<clientId>
+|REGISTRY_PASSWORD|<clientSecret>
+|RESOURCE_GROUP|<groupId>
+
+|===
+
+* Git Action Example
+
+----
+
+on: [push]
+name: Linux_Container_Workflow
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/aci-deploy@v1'
+          with:
+            resource-group: ${{ secrets.RESOURCE_GROUP }}
+            dns-name-label: basket
+            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            registry-username: ${{ secrets.REGISTRY_USERNAME }}
+            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+            name: <container_name>
+            location: 'switzerlandnorth'
+----
+
+* done you have your fist container deploy on Azure!!!
+
+### Help
+
+https://github.com/Azure/aci-deploy
 
 https://learn.microsoft.com/en-us/azure/container-instances/container-instances-github-action
 
-* Azure Deploy container
+## Azure Deploy an app service
+
+* Prerequisites
+-   Azure steps from above are needed
+-   Create an app service <app_service_name>
+
+* Update the app_registry_name created above
+
+    az ad sp create-for-rbac --name <app_registry_name> --role contributor \
+                              --scopes /subscriptions/<subscriptionId>/resourceGroups/<groupId>/providers/Microsoft.Web/sites/<app_service_name> \
+                              --sdk-auth
+
+* Result
+
+    {
+      "clientId": "xxx",
+      "clientSecret": "xxx",
+      "subscriptionId": "xxx",
+      "tenantId": "xxx",
+      "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+      "resourceManagerEndpointUrl": "https://management.azure.com/",
+      "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+      "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+      "galleryEndpointUrl": "https://gallery.azure.com/",
+      "managementEndpointUrl": "https://management.core.windows.net/"
+    }
+
+* in git
+
+- create a new secret AZURE_WEBAPP_PUBLISH_PROFILE
+- from the <app_service_name> "Download publish profile" and add it to the secret
+
+* Git Action Example
+
+----
+
+name: Linux Container Node Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout the repo
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+    - name: 'Deploy to Azure Container Instances'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: <app_service_name>
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/<registry_container_name>:${{ github.sha }}
+
+----
+
+### Help
 
 https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel
