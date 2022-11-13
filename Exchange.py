@@ -52,7 +52,7 @@ class OptionCalculation(Resource):
             return price, 200
         except Exception as e:
             bad_request = {
-                "error": e
+                "error": str(e)
             }
             return bad_request, 400
 
