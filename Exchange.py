@@ -77,17 +77,33 @@ class OptionCalculation(Resource):
         current_date = datetime.date.today()
         return current_date.strftime("%Y-%m-%d")
 
+    def get_prices(self, stock_name):
+        try:
+            return download_data_single(stock_name, '2010-01-01', self.get_today())
+        except:
+            raise Exception("Invalid stock name, could not retrieve prices.")
+
+    def get_stock_prices(self, prices):
+        try:
+            stock_price = float(prices.tail(1)['Close'])
+            print("Stock price: ", stock_price)
+            return stock_price
+        except:
+            raise Exception("Invalid stock name, could not retrieve stock price.")
+
     def calculate_option(self, expiry, stock_name, option_type):
-        prices = download_data_single(stock_name, '2010-01-01', self.get_today())
-        stock_price = float(prices.tail(1)['Close'])
-        print("Stock price: ", stock_price)
+
+        risk_free_rate = 0.006  # switzerland
+
+        prices = self.get_prices(stock_name)
+        stock_price = self.get_stock_prices(prices)
+
         strike = stock_price * 1
         strike_pct = 100 * 1
         print("Strike level {}: ".format(strike))
         print("Strike pct {}%: ".format(strike_pct))
         print("Expiry {}y: ".format(expiry))
-        risk_free_rate = 0.006  # switzerland
-        returns = calculate_return_log(prices)
+        calculate_return_log(prices)
         volatility = calculate_volatility(prices)
         print("Volatility: ", volatility)
         model = OptionPricing(stock_price, strike, expiry, risk_free_rate, volatility, 1000)
