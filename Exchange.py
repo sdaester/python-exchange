@@ -33,31 +33,28 @@ class OptionCalculation(Resource):
         args = request.args
         stock_name = args.get('stock')
 
-        expiry = None
-        option_type = None
         try:
             expiry = self.get_expiry(args)
             option_type = self.get_option_type(args)
+            option_price, stock_price, strike, strike_pct = self.calculate_option(expiry, stock_name, option_type)
+
+            price = {
+                "stock": stock_name,
+                "expiry": "{}y".format(expiry),
+                "type": option_type,
+                "option_price": "{0:.3f}".format(option_price),
+                "stock_price": "{0:.3f}".format(stock_price),
+                "strike": "{0:.3f}".format(strike),
+                "strike_pct": "{0:.2f}".format(strike_pct)
+            }
+
+            print("Option calculated...")
+            return price, 200
         except Exception as e:
             bad_request = {
                 "error": e
             }
             return bad_request, 400
-
-        option_price, stock_price, strike, strike_pct = self.calculate_option(expiry, stock_name, option_type)
-
-        price = {
-            "stock": stock_name,
-            "expiry": "{}y".format(expiry),
-            "type": option_type,
-            "option_price": "{0:.3f}".format(option_price),
-            "stock_price": "{0:.3f}".format(stock_price),
-            "strike": "{0:.3f}".format(strike),
-            "strike_pct": "{0:.2f}".format(strike_pct)
-        }
-
-        print("Option calculated...")
-        return price, 200
 
     def get_option_type(self, args):
         option_type = args.get('opt_type')
