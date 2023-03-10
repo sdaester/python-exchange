@@ -66,7 +66,7 @@ class OptionCalculation(Resource):
     def get_expiry(self, args):
         expiry = args.get('expiry')
         try:
-            return int(expiry)
+            return float(expiry)
         except Exception as e:
             raise Exception("Invalid expiry {}, {}".format(expiry, e))
 
