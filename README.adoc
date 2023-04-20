@@ -26,3 +26,5 @@ python Exchange.py
 == Service EndPoint
 
 http://localhost:5000/api/rest/prices
+
+commit
