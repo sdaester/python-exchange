@@ -27,4 +27,4 @@ python Exchange.py
 
 http://localhost:5000/api/rest/prices
 
-commit
+commit2
