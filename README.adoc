@@ -30,6 +30,10 @@ http://localhost:5000/api/rest/prices
 
 # How-To
 
-## Git Azure Actions
+### Git Azure Actions
 
 https://github.com/jcorderop/python-exchange/blob/master/help/GitActions.adoc
+
+### Azure Container Registry
+
+https://github.com/jcorderop/python-exchange/blob/master/help/ContainerRegistry.adoc
