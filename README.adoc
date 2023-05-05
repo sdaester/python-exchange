@@ -1,3 +1,14 @@
+= python-exchange
+
+== Description
+
+This project was defined as example to be deployed using Git Action into Azure App Service.
+Bellow you can find how to run the service local.
+* How to create local docker images.
+* How to use Azure Container Registry for docker images.
+* How to deploy in Azure App Service.
+* How to deploy elasticseach into dockers and how to integrate with python.
+
 == To Run the Exchange locally
 
 * The following instructions are used run the exchange service
@@ -29,7 +40,7 @@ python Exchange.py
 http://localhost:5000/api/rest/prices
 
 
-# Project Actions
+== Project Actions
 
 To deploy in *Azure App Service*, when commits are merged in Master the following Git Acition is triggered.
 
@@ -48,17 +59,17 @@ If the project is clonned the folowwing is required to:
     REGISTRY_USERNAME
     RESOURCE_GROUP
 
-# How-To
+== How-To
 
-### Git Azure Actions
+=== Git Azure Actions
 
 https://github.com/jcorderop/python-exchange/blob/master/help/GitActions.adoc
 
-### Azure Container Registry
+=== Azure Container Registry
 
 https://github.com/jcorderop/python-exchange/blob/master/help/ContainerRegistry.adoc
 
-### Elasticsearch
+=== Elasticsearch
 
 https://github.com/jcorderop/python-exchange/blob/master/help/DeployElastic.adoc
 
