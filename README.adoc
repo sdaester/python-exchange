@@ -37,3 +37,9 @@ https://github.com/jcorderop/python-exchange/blob/master/help/GitActions.adoc
 ### Azure Container Registry
 
 https://github.com/jcorderop/python-exchange/blob/master/help/ContainerRegistry.adoc
+
+### Elasticsearch
+
+https://github.com/jcorderop/python-exchange/blob/master/help/DeployElastic.adoc
+
+
