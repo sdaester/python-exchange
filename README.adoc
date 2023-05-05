@@ -20,9 +20,9 @@ python Exchange.py
 
 * *deploy.bat* is used to:
 
-  * create the image
-  * push the image into docker hub
-  * to run the container
+  + create the image
+  + push the image into docker hub
+  + to run the container
 
 == Service EndPoint
 
