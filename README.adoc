@@ -3,7 +3,8 @@
 == Description
 
 This project was defined as example to be deployed using Git Action into Azure App Service.
-Bellow you can find how to run the service local.
+Bellow you can find how to run the service local:
+
 * How to create local docker images.
 * How to use Azure Container Registry for docker images.
 * How to deploy in Azure App Service.
