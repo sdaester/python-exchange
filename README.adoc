@@ -38,7 +38,7 @@ python Exchange.py
 
 == Service EndPoint
 
-To get Snapshot of Prices
+To get a Crypto Currency Snapshot of Prices
 
 http://localhost:5000/api/rest/prices
 
