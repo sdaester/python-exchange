@@ -27,4 +27,9 @@ python Exchange.py
 
 http://localhost:5000/api/rest/prices
 
-commit2
+
+# How-To
+
+## Git Azure Actions
+
+https://github.com/jcorderop/python-exchange/blob/master/help/GitActions.adoc
