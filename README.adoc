@@ -29,6 +29,25 @@ python Exchange.py
 http://localhost:5000/api/rest/prices
 
 
+# Project Actions
+
+To deploy in *Azure App Service*, when commits are merged in Master the following Git Acition is triggered.
+
+https://github.com/jcorderop/python-exchange/blob/master/.github/workflows/azure-app_service.yml
+
+If the project is clonned the folowwing is required to:
+
+* Azure Container Registry
+* Azure App Service
+* The following secrets
+
+    AZURE_CREDENTIALS
+    AZURE_WEBAPP_PUBLISH_PROFILE
+    REGISTRY_LOGIN_SERVER
+    REGISTRY_PASSWORD
+    REGISTRY_USERNAME
+    RESOURCE_GROUP
+
 # How-To
 
 ### Git Azure Actions
