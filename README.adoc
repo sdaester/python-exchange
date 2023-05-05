@@ -38,7 +38,13 @@ python Exchange.py
 
 == Service EndPoint
 
+To get Snapshot of Prices
+
 http://localhost:5000/api/rest/prices
+
+To Price Vanilla Equity Option
+
+http://localhost:5000/api/rest/option_prices?stock=*IBM*&expiry=*1*&opt_type=*put*
 
 
 == Project Actions
