@@ -108,8 +108,9 @@ https://learn.microsoft.com/en-us/azure/container-instances/container-instances-
 
 * Update the app_registry_name created above
 
-    groupId=$(az group show --name <resource-group-name> --query id --output tsv)
-    az ad sp create-for-rbac --scope $groupId --role Contributor --sdk-auth
+       az ad sp create-for-rbac --name "myApp" --role contributor \
+                            --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                            --sdk-auth
 
 * Result
 
@@ -173,4 +174,5 @@ jobs:
 
 ### Help
 
+https://github.com/Azure/webapps-container-deploy
 https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel
