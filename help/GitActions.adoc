@@ -8,9 +8,8 @@
 
 * Create the app_registry_name
 
-    az ad sp create-for-rbac --name <app_registry_name> --role contributor \
-                          --scopes /subscriptions/<subscriptionId>/resourceGroups/<groupId>/providers/Microsoft.ContainerInstance/containerGroups/<container_name> \
-                          --sdk-auth
+    groupId=$(az group show --name <resource-group-name> --query id --output tsv)
+    az ad sp create-for-rbac --scope $groupId --role Contributor --sdk-auth
 
 * Result:
 
