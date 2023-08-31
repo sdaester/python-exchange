@@ -1,5 +1,7 @@
 # Git Actions
 
+This section explain how to deploy a service via a conteiner or an app service.
+
 ## Azure Deploy a container instance
 
 * Prerequisites
@@ -8,9 +10,8 @@
 
 * Create the app_registry_name
 
-    az ad sp create-for-rbac --name <app_registry_name> --role contributor \
-                          --scopes /subscriptions/<subscriptionId>/resourceGroups/<groupId>/providers/Microsoft.ContainerInstance/containerGroups/<container_name> \
-                          --sdk-auth
+    groupId=$(az group show --name <resource-group-name> --query id --output tsv)
+    az ad sp create-for-rbac --scope $groupId --role Contributor --sdk-auth
 
 * Result:
 
@@ -107,9 +108,9 @@ https://learn.microsoft.com/en-us/azure/container-instances/container-instances-
 
 * Update the app_registry_name created above
 
-    az ad sp create-for-rbac --name <app_registry_name> --role contributor \
-                              --scopes /subscriptions/<subscriptionId>/resourceGroups/<groupId>/providers/Microsoft.Web/sites/<app_service_name> \
-                              --sdk-auth
+       az ad sp create-for-rbac --name "myApp" --role contributor \
+                            --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                            --sdk-auth
 
 * Result
 
@@ -173,4 +174,5 @@ jobs:
 
 ### Help
 
+https://github.com/Azure/webapps-container-deploy
 https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel

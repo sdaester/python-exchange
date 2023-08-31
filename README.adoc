@@ -1,3 +1,15 @@
+= python-exchange
+
+== Description
+
+This project was defined as example to be deployed using Git Action into Azure App Service.
+Bellow you can find how to run the service local:
+
+* How to create local docker images.
+* How to use Azure Container Registry for docker images.
+* How to deploy in Azure App Service.
+* How to deploy elasticseach into dockers and how to integrate with python.
+
 == To Run the Exchange locally
 
 * The following instructions are used run the exchange service
@@ -18,13 +30,56 @@ python Exchange.py
 
 === Docker
 
-* deploy.bat is used to:
-* create the image
-* push the image into docker hub
-* to run the container
+*deploy.bat* is used to:
+
+* Creates the image
+* Pushs the image into docker hub
+* Runs the container
 
 == Service EndPoint
 
+To get a Crypto Currency Snapshot of Prices
+
 http://localhost:5000/api/rest/prices
 
-commit2
+To Price Vanilla Equity Option
+
+http://localhost:5000/api/rest/option_prices?stock=*IBM*&expiry=*1*&opt_type=*put*
+
+
+== Project Actions
+
+To deploy in *Azure App Service*, when commits are merged in Master the following Git Acition is triggered.
+
+https://github.com/jcorderop/python-exchange/blob/master/.github/workflows/azure-app_service.yml
+
+If the project is clonned the folowwing is required to:
+
+* Azure Container Registry
+* Azure App Service
+* The following secrets
+
+    AZURE_CREDENTIALS
+    AZURE_WEBAPP_PUBLISH_PROFILE
+    REGISTRY_LOGIN_SERVER
+    REGISTRY_PASSWORD
+    REGISTRY_USERNAME
+    RESOURCE_GROUP
+
+== How-To
+
+=== Git Azure Actions
+
+https://github.com/jcorderop/python-exchange/blob/master/help/GitActions.adoc
+
+=== Azure Container Registry
+
+https://github.com/jcorderop/python-exchange/blob/master/help/ContainerRegistry.adoc
+
+=== Elasticsearch
+
+https://github.com/jcorderop/python-exchange/blob/master/help/DeployElastic.adoc
+
+== Examples
+
+https://github.com/Azure/azureml-examples
